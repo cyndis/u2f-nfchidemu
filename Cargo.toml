@@ -3,6 +3,7 @@ name = "u2f-nfchidemu"
 version = "1.0.0"
 authors = ["Mikko Perttunen <cyndis@kapsi.fi>"]
 edition = "2018"
+license = "MIT/Apache-2.0"
 
 [dependencies]
 nfc-sys = "0.1"
