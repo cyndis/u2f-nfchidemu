@@ -5,3 +5,5 @@ Description=U2F-NFC HID Emulation
 ExecStart=/usr/bin/u2f-nfchidemu
 Type=simple
 
+[Install]
+WantedBy=multi-user.target
