@@ -1,0 +1,23 @@
+[[package]]
+name = "libc"
+version = "0.2.49"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "nfc-sys"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "libc 0.2.49 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "nfchidemu"
+version = "0.1.0"
+dependencies = [
+ "nfc-sys 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[metadata]
+"checksum libc 0.2.49 (registry+https://github.com/rust-lang/crates.io-index)" = "413f3dfc802c5dc91dc570b05125b6cda9855edfaa9825c9849807876376e70e"
+"checksum nfc-sys 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "98e81aa40741063239b7df1b7c7a4b856b6bc0a0fd7dcb36211923a519fcdd8e"

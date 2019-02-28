@@ -1,0 +1,8 @@
+[package]
+name = "nfchidemu"
+version = "0.1.0"
+authors = ["Mikko Perttunen <cyndis@kapsi.fi>"]
+edition = "2018"
+
+[dependencies]
+nfc-sys = "0.1"
