@@ -69,15 +69,22 @@ struct HidMessage {
     data: Vec<u8>,
 }
 
-struct Hid {
-    uhid: Uhid,
+struct Hid<'a> {
+    uhid: &'a mut Uhid,
     pending: Option<PendingData>,
 }
 
-impl Hid {
-    fn new() -> Result<Hid, Box<std::error::Error>> {
-        let mut uhid = Uhid::new()?;
+impl<'a> Drop for Hid<'a> {
+    fn drop(&mut self) {
+        let mut req: uhid::uhid_event = unsafe { std::mem::zeroed() };
+        req.type_ = uhid::uhid_event_type_UHID_DESTROY;
 
+        let _ = self.uhid.write(&req);
+    }
+}
+
+impl<'a> Hid<'a> {
+    fn new(uhid: &'a mut Uhid) -> Result<Hid<'a>, Box<std::error::Error>> {
         let mut req: uhid::uhid_event = unsafe { std::mem::zeroed() };
         req.type_ = uhid::uhid_event_type_UHID_CREATE2;
         unsafe {
@@ -214,6 +221,12 @@ static DEVICE_CHIP_ERROR_MESSAGE: &'static str =
 fn main() -> Result<(), Box<std::error::Error>> {
     let mut nfc_context = nfc::Context::new()?;
     let mut nfc_device = nfc_context.open_initiator()?;
+    let mut uhid = Uhid::new()?;
+
+    privdrop::PrivDrop::default()
+        .chroot("/var/empty")
+        .user("nobody")?
+        .apply()?;
 
     loop {
         /* Find NFC device. */
@@ -236,7 +249,7 @@ fn main() -> Result<(), Box<std::error::Error>> {
 
         /* Got NFC device. */
 
-        let mut hid = Hid::new()?;
+        let mut hid = Hid::new(&mut uhid)?;
 
         loop {
             let msg = hid.read()?;
